@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2015 Google Inc.
+  ~ Copyright 2017 Denis Zenin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
     <version>7</version>
   </parent>
 
-  <groupId>com.google.googlejavaformat</groupId>
+  <groupId>com.github.qbixus</groupId>
   <artifactId>google-java-format-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.6-SNAPSHOT</version>
@@ -44,14 +45,7 @@
     A Java source code formatter that follows Google Java Style.
   </description>
 
-  <url>https://github.com/google/google-java-format</url>
-
-  <inceptionYear>2015</inceptionYear>
-
-  <organization>
-    <name>Google Inc.</name>
-    <url>http://www.google.com/</url>
-  </organization>
+  <url>https://github.com/qbixus/google-java-format</url>
 
   <licenses>
     <license>
@@ -60,33 +54,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <developers>
-    <developer>
-      <id>jdd</id>
-      <name>John DeTreville</name>
-      <email>jdd@google.com</email>
-      <organization>Google Inc.</organization>
-      <organizationUrl>http://www.google.com/</organizationUrl>
-      <roles>
-        <role>owner</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-8</timezone>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>http://github.com/google/google-java-format/</url>
-    <connection>scm:git:git://github.com/google/google-java-format.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/google/google-java-format.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub Issues</system>
-    <url>http://github.com/google/google-java-format/issues</url>
-  </issueManagement>
 
   <prerequisites>
     <maven>3.0.3</maven>

@@ -1,3 +1,12 @@
+This is a complete fork of a work originally done by Google Inc. at
+https://github.com/google/google-java-format.
+
+The aim is to get some additions to Google Java Style implemented and so these
+changes are not intended for contribution back to the original repository as
+there is mostly no chance that they will be accepted there. At the same time,
+this fork is intended to be fully synchronized with the original repository
+and it follows their version numbers.
+
 # google-java-format
 
 `google-java-format` is a program that reformats Java source code to comply with
@@ -9,7 +18,7 @@
 
 ### from the command-line
 
-[Download the formatter](https://github.com/google/google-java-format/releases)
+[Download the formatter](https://github.com/qbixus/google-java-format/releases)
 and run it with:
 
 ```
@@ -66,7 +75,7 @@ configuration.
 
 ```xml
 <dependency>
-  <groupId>com.google.googlejavaformat</groupId>
+  <groupId>com.github.qbixus</groupId>
   <artifactId>google-java-format</artifactId>
   <version>1.5</version>
 </dependency>
@@ -76,7 +85,7 @@ configuration.
 
 ```groovy
 dependencies {
-  compile 'com.google.googlejavaformat:google-java-format:1.5'
+  compile 'com.github.qbixus:google-java-format:1.5'
 }
 ```
 
@@ -101,14 +110,11 @@ Your starting point should be the instance methods of
 
     mvn install
 
-## Contributing
-
-Please see [the contributors guide](CONTRIBUTING.md) for details.
-
 ## License
 
 ```text
 Copyright 2015 Google Inc.
+Copyright 2017 Denis Zenin
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
