@@ -183,4 +183,9 @@ public class CommandLineOptionsParserTest {
     assertThat(CommandLineOptionsParser.parse(Arrays.asList("-e=ISO-8859-1")).encoding())
         .isSameAs(Charset.forName("ISO-8859-1"));
   }
+
+  @Test
+  public void stdinFiles() {
+    assertThat(CommandLineOptionsParser.parse(Arrays.asList("-s")).stdinFiles()).isTrue();
+  }
 }

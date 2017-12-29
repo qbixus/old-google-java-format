@@ -63,6 +63,8 @@ final class UsageException extends Exception {
     "    Encoding to use for input and output files/streams.",
     "  --aosp_p, -aosp_p, -a-p",
     "    Use AOSP+ (with forced trailing line breaks) style instead.",
+    "  --stdinFiles, -stdinFiles, -s",
+    "    Read input file names from stdin.",
     "  @<filename>",
     "    Read options and filenames from file.",
     "",

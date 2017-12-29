@@ -126,6 +126,11 @@ final class CommandLineOptionsParser {
         case "-a-p":
           optionsBuilder.aospP(true);
           break;
+        case "--stdinFiles":
+        case "-stdinFiles":
+        case "-s":
+          optionsBuilder.stdinFiles(true);
+          break;
         default:
           throw new IllegalArgumentException("unexpected flag: " + flag);
       }

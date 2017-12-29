@@ -44,6 +44,7 @@ final class CommandLineOptions {
   private final boolean setExitIfChanged;
   private final Charset encoding;
   private final boolean aospP;
+  private final boolean stdinFiles;
 
   CommandLineOptions(
       ImmutableList<String> files,
@@ -61,7 +62,8 @@ final class CommandLineOptions {
       boolean dryRun,
       boolean setExitIfChanged,
       Charset encoding,
-      boolean aospP) {
+      boolean aospP,
+      boolean stdinFiles) {
     this.files = files;
     this.inPlace = inPlace;
     this.lines = lines;
@@ -78,6 +80,7 @@ final class CommandLineOptions {
     this.setExitIfChanged = setExitIfChanged;
     this.encoding = encoding;
     this.aospP = aospP;
+    this.stdinFiles = stdinFiles;
   }
 
   /** The files to format. */
@@ -167,6 +170,11 @@ final class CommandLineOptions {
     return aospP;
   }
 
+  /** Read names of files to format from stdin. */
+  boolean stdinFiles() {
+    return stdinFiles;
+  }
+
   static Builder builder() {
     return new Builder();
   }
@@ -189,6 +197,7 @@ final class CommandLineOptions {
     private boolean setExitIfChanged = false;
     private Charset encoding = UTF_8;
     private boolean aospP = false;
+    private boolean stdinFiles = false;
 
     ImmutableList.Builder<String> filesBuilder() {
       return files;
@@ -268,6 +277,11 @@ final class CommandLineOptions {
       return this;
     }
 
+    Builder stdinFiles(boolean value) {
+      stdinFiles = value;
+      return this;
+    }
+
     CommandLineOptions build() {
       return new CommandLineOptions(
           files.build(),
@@ -285,7 +299,8 @@ final class CommandLineOptions {
           dryRun,
           setExitIfChanged,
           encoding,
-          aospP);
+          aospP,
+          stdinFiles);
     }
   }
 }

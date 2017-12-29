@@ -22,9 +22,12 @@ import com.google.googlejavaformat.java.JavaFormatterOptions.Style;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -105,9 +108,65 @@ public final class Main {
 
     if (parameters.stdin()) {
       return formatStdin(parameters, options);
+    } else if (parameters.stdinFiles()) {
+      return formatStdinFiles(parameters, options);
     } else {
       return formatFiles(parameters, options);
     }
+  }
+
+  private int formatStdinFiles(CommandLineOptions parameters, JavaFormatterOptions options) {
+    boolean allOk = true;
+    try (LineNumberReader rdr = new LineNumberReader(new InputStreamReader(inStream))) {
+      for (String fileName = rdr.readLine(); fileName != null; fileName = rdr.readLine()) {
+		fileName = fileName.trim();
+        if (!fileName.endsWith(".java")) {
+          errWriter.println("Skipping non-Java file: " + fileName);
+        } else {
+          Path path = null;
+          String input = null;
+          String formatted = null;
+          try {
+            path = Paths.get(fileName);
+            input = new String(Files.readAllBytes(path), parameters.encoding());
+
+            FormatFileCallable formatter = new FormatFileCallable(parameters, input, options);
+            try {
+              formatted = formatter.call();
+            } catch (RuntimeException e) {
+              errWriter.println(fileName + ": could not format file: " + e.getMessage());
+            }
+          } catch (InvalidPathException e) {
+            errWriter.println(fileName + ": invalid path: " + e.getMessage());
+          } catch (IOException e) {
+            errWriter.println(fileName + ": could not read file: " + e.getMessage());
+          } catch (FormatterException e) {
+            for (FormatterDiagnostic diagnostic : e.diagnostics()) {
+              errWriter.println(path + ":" + diagnostic.toString());
+            }
+          }
+
+          if (path == null || input == null || formatted == null) {
+            allOk = false;
+          } else if (!parameters.inPlace()) {
+            outWriter.write(formatted);
+          } else {
+            try {
+              if (!formatted.equals(input)) {
+                Files.write(path, formatted.getBytes(parameters.encoding()));
+              }
+              outWriter.println(fileName);
+            } catch (IOException e) {
+              errWriter.println(path + ": could not write file: " + e.getMessage());
+              allOk = false;
+            }
+          }
+        }
+      }
+    } catch (IOException e) {
+      allOk = false;
+    }
+    return (allOk ? 0 : 1);
   }
 
   private int formatFiles(CommandLineOptions parameters, JavaFormatterOptions options) {
@@ -228,7 +287,10 @@ public final class Main {
       filesToFormat++;
     }
 
-    if (parameters.inPlace() && parameters.files().isEmpty()) {
+    if (!parameters.files().isEmpty() && parameters.stdinFiles()) {
+      throw new UsageException("both files and stdin with files were provided");
+    }
+    if (parameters.inPlace() && !(!parameters.files().isEmpty() || parameters.stdinFiles())) {
       throw new UsageException("in-place formatting was requested but no files were provided");
     }
     if (parameters.isSelection() && filesToFormat != 1) {
@@ -237,7 +299,9 @@ public final class Main {
     if (parameters.offsets().size() != parameters.lengths().size()) {
       throw new UsageException("-offsets and -lengths flags must be provided in matching pairs");
     }
-    if (filesToFormat <= 0 && !parameters.version() && !parameters.help()) {
+    if ((filesToFormat <= 0 && !parameters.stdinFiles())
+        && !parameters.version()
+        && !parameters.help()) {
       throw new UsageException("no files were provided");
     }
     if (parameters.stdin() && !parameters.files().isEmpty()) {
