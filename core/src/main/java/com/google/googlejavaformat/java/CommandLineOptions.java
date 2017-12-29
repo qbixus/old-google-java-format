@@ -14,8 +14,11 @@
 
 package com.google.googlejavaformat.java;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableRangeSet;
+import java.nio.charset.Charset;
 
 /**
  * Command line options for google-java-format.
@@ -39,6 +42,7 @@ final class CommandLineOptions {
   private final boolean removeUnusedImports;
   private final boolean dryRun;
   private final boolean setExitIfChanged;
+  private final Charset encoding;
 
   CommandLineOptions(
       ImmutableList<String> files,
@@ -54,7 +58,8 @@ final class CommandLineOptions {
       boolean sortImports,
       boolean removeUnusedImports,
       boolean dryRun,
-      boolean setExitIfChanged) {
+      boolean setExitIfChanged,
+      Charset encoding) {
     this.files = files;
     this.inPlace = inPlace;
     this.lines = lines;
@@ -69,6 +74,7 @@ final class CommandLineOptions {
     this.removeUnusedImports = removeUnusedImports;
     this.dryRun = dryRun;
     this.setExitIfChanged = setExitIfChanged;
+    this.encoding = encoding;
   }
 
   /** The files to format. */
@@ -148,6 +154,11 @@ final class CommandLineOptions {
     return !lines().isEmpty() || !offsets().isEmpty() || !lengths().isEmpty();
   }
 
+  /** Encoding for input and output */
+  public Charset encoding() {
+    return encoding;
+  }
+
   static Builder builder() {
     return new Builder();
   }
@@ -168,6 +179,7 @@ final class CommandLineOptions {
     private boolean removeUnusedImports = true;
     private boolean dryRun = false;
     private boolean setExitIfChanged = false;
+    private Charset encoding = UTF_8;
 
     ImmutableList.Builder<String> filesBuilder() {
       return files;
@@ -237,6 +249,11 @@ final class CommandLineOptions {
       return this;
     }
 
+    Builder encoding(Charset encoding) {
+      this.encoding = encoding;
+      return this;
+    }
+
     CommandLineOptions build() {
       return new CommandLineOptions(
           files.build(),
@@ -252,7 +269,8 @@ final class CommandLineOptions {
           sortImports,
           removeUnusedImports,
           dryRun,
-          setExitIfChanged);
+          setExitIfChanged,
+          encoding);
     }
   }
 }

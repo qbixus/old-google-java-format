@@ -20,6 +20,7 @@ import static org.junit.Assert.fail;
 
 import com.google.common.collect.Range;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -52,6 +53,7 @@ public class CommandLineOptionsParserTest {
     assertThat(options.removeUnusedImports()).isTrue();
     assertThat(options.dryRun()).isFalse();
     assertThat(options.setExitIfChanged()).isFalse();
+    assertThat(options.encoding()).isSameAs(UTF_8);
   }
 
   @Test
@@ -174,5 +176,11 @@ public class CommandLineOptionsParserTest {
 
     CommandLineOptions options = CommandLineOptionsParser.parse(Arrays.asList(args));
     assertThat(options.files()).containsExactly("L", "M", "ℕ", "@O", "P", "Q");
+  }
+
+  @Test
+  public void encoding() {
+    assertThat(CommandLineOptionsParser.parse(Arrays.asList("-e=ISO-8859-1")).encoding())
+        .isSameAs(Charset.forName("ISO-8859-1"));
   }
 }

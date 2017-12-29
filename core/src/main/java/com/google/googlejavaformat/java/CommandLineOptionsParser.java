@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableRangeSet;
 import com.google.common.collect.Range;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,6 +115,11 @@ final class CommandLineOptionsParser {
           break;
         case "--set-exit-if-changed":
           optionsBuilder.setExitIfChanged(true);
+          break;
+        case "--encoding":
+        case "-encoding":
+        case "-e":
+          optionsBuilder.encoding(Charset.forName(getValue(flag, it, value)));
           break;
         default:
           throw new IllegalArgumentException("unexpected flag: " + flag);

@@ -59,6 +59,8 @@ final class UsageException extends Exception {
     "    Print this usage statement.",
     "  --version, -version, -v",
     "    Print the version.",
+    "  --encoding, -encodinf, -e",
+    "    Encoding to use for input and output files/streams.",
     "  @<filename>",
     "    Read options and filenames from file.",
     "",

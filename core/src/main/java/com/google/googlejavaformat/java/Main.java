@@ -119,7 +119,7 @@ public final class Main {
       Path path = Paths.get(fileName);
       String input;
       try {
-        input = new String(Files.readAllBytes(path), UTF_8);
+        input = new String(Files.readAllBytes(path), parameters.encoding());
       } catch (IOException e) {
         errWriter.println(fileName + ": could not read file: " + e.getMessage());
         return 1;
@@ -159,7 +159,7 @@ public final class Main {
           continue; // preserve original file
         }
         try {
-          Files.write(path, formatted.getBytes(UTF_8));
+          Files.write(path, formatted.getBytes(parameters.encoding()));
         } catch (IOException e) {
           errWriter.println(path + ": could not write file: " + e.getMessage());
           allOk = false;
@@ -179,7 +179,7 @@ public final class Main {
   private int formatStdin(CommandLineOptions parameters, JavaFormatterOptions options) {
     String input;
     try {
-      input = new String(ByteStreams.toByteArray(inStream), UTF_8);
+      input = new String(ByteStreams.toByteArray(inStream), parameters.encoding());
     } catch (IOException e) {
       throw new IOError(e);
     }
