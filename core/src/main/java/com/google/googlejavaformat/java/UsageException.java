@@ -61,6 +61,8 @@ final class UsageException extends Exception {
     "    Print the version.",
     "  --encoding, -encodinf, -e",
     "    Encoding to use for input and output files/streams.",
+    "  --aosp_p, -aosp_p, -a-p",
+    "    Use AOSP+ (with forced trailing line breaks) style instead.",
     "  @<filename>",
     "    Read options and filenames from file.",
     "",

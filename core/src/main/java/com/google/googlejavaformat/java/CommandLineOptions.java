@@ -43,6 +43,7 @@ final class CommandLineOptions {
   private final boolean dryRun;
   private final boolean setExitIfChanged;
   private final Charset encoding;
+  private final boolean aospP;
 
   CommandLineOptions(
       ImmutableList<String> files,
@@ -59,7 +60,8 @@ final class CommandLineOptions {
       boolean removeUnusedImports,
       boolean dryRun,
       boolean setExitIfChanged,
-      Charset encoding) {
+      Charset encoding,
+      boolean aospP) {
     this.files = files;
     this.inPlace = inPlace;
     this.lines = lines;
@@ -75,6 +77,7 @@ final class CommandLineOptions {
     this.dryRun = dryRun;
     this.setExitIfChanged = setExitIfChanged;
     this.encoding = encoding;
+    this.aospP = aospP;
   }
 
   /** The files to format. */
@@ -159,6 +162,11 @@ final class CommandLineOptions {
     return encoding;
   }
 
+  /** Use AOSP+ style instead. */
+  boolean aospP() {
+    return aospP;
+  }
+
   static Builder builder() {
     return new Builder();
   }
@@ -180,6 +188,7 @@ final class CommandLineOptions {
     private boolean dryRun = false;
     private boolean setExitIfChanged = false;
     private Charset encoding = UTF_8;
+    private boolean aospP = false;
 
     ImmutableList.Builder<String> filesBuilder() {
       return files;
@@ -254,6 +263,11 @@ final class CommandLineOptions {
       return this;
     }
 
+    Builder aospP(boolean value) {
+      this.aospP = value;
+      return this;
+    }
+
     CommandLineOptions build() {
       return new CommandLineOptions(
           files.build(),
@@ -270,7 +284,8 @@ final class CommandLineOptions {
           removeUnusedImports,
           dryRun,
           setExitIfChanged,
-          encoding);
+          encoding,
+          aospP);
     }
   }
 }

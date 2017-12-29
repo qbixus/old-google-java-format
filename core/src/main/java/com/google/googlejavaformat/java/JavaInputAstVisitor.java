@@ -194,7 +194,8 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
   /** Whether to allow trailing blank lines in blocks. */
   enum AllowTrailingBlankLine {
     YES,
-    NO;
+    NO,
+    FORCE;
 
     static AllowTrailingBlankLine valueOf(boolean b) {
       return b ? YES : NO;
@@ -263,6 +264,7 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
 
   private static final Indent.Const ZERO = Indent.Const.ZERO;
   private final int indentMultiplier;
+  private final boolean forceTrailingBlankLines;
   private final Indent.Const minusTwo;
   private final Indent.Const minusFour;
   private final Indent.Const plusTwo;
@@ -296,9 +298,11 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
    *
    * @param builder the {@link OpsBuilder}
    */
-  public JavaInputAstVisitor(OpsBuilder builder, int indentMultiplier) {
+  public JavaInputAstVisitor(
+      OpsBuilder builder, int indentMultiplier, boolean forceTrailingBlankLines) {
     this.builder = builder;
     this.indentMultiplier = indentMultiplier;
+    this.forceTrailingBlankLines = forceTrailingBlankLines;
     minusTwo = Indent.Const.make(-2, indentMultiplier);
     minusFour = Indent.Const.make(-4, indentMultiplier);
     plusTwo = Indent.Const.make(+2, indentMultiplier);
@@ -718,7 +722,7 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         node.getStatement(),
         CollapseEmptyOrNot.YES,
         AllowLeadingBlankLine.YES,
-        AllowTrailingBlankLine.YES);
+        (!forceTrailingBlankLines ? AllowTrailingBlankLine.YES : AllowTrailingBlankLine.FORCE));
     if (node.getStatement().getKind() == BLOCK) {
       builder.space();
     } else {
@@ -1065,7 +1069,9 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
           statements.get(i),
           CollapseEmptyOrNot.valueOf(onlyClause),
           AllowLeadingBlankLine.YES,
-          AllowTrailingBlankLine.valueOf(trailingClauses));
+          (!forceTrailingBlankLines
+              ? AllowTrailingBlankLine.valueOf(trailingClauses)
+              : trailingClauses ? AllowTrailingBlankLine.FORCE : AllowTrailingBlankLine.NO));
       followingBlock = statements.get(i).getKind() == BLOCK;
       first = false;
     }
@@ -1800,11 +1806,17 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         node.getBlock(),
         CollapseEmptyOrNot.valueOf(!trailingClauses),
         AllowLeadingBlankLine.YES,
-        AllowTrailingBlankLine.valueOf(trailingClauses));
+        (!forceTrailingBlankLines
+            ? AllowTrailingBlankLine.valueOf(trailingClauses)
+            : trailingClauses ? AllowTrailingBlankLine.FORCE : AllowTrailingBlankLine.NO));
     for (int i = 0; i < node.getCatches().size(); i++) {
       CatchTree catchClause = node.getCatches().get(i);
       trailingClauses = i < node.getCatches().size() - 1 || node.getFinallyBlock() != null;
-      visitCatchClause(catchClause, AllowTrailingBlankLine.valueOf(trailingClauses));
+      visitCatchClause(
+          catchClause,
+          (!forceTrailingBlankLines
+              ? AllowTrailingBlankLine.valueOf(trailingClauses)
+              : trailingClauses ? AllowTrailingBlankLine.FORCE : AllowTrailingBlankLine.NO));
     }
     if (node.getFinallyBlock() != null) {
       builder.space();
@@ -1998,7 +2010,9 @@ public final class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       builder.close();
       builder.forcedBreak();
       builder.close();
-      if (allowTrailingBlankLine == AllowTrailingBlankLine.NO) {
+      if (allowTrailingBlankLine == AllowTrailingBlankLine.FORCE) {
+        builder.blankLineWanted(BlankLineWanted.YES);
+      } else if (allowTrailingBlankLine == AllowTrailingBlankLine.NO) {
         builder.blankLineWanted(BlankLineWanted.NO);
       } else {
         builder.blankLineWanted(BlankLineWanted.PRESERVE);

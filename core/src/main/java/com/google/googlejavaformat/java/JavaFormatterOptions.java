@@ -34,19 +34,28 @@ public class JavaFormatterOptions {
   public enum Style {
 
     /** The default Google Java Style configuration. */
-    GOOGLE(1),
+    GOOGLE(1, false),
 
     /** The AOSP-compliant configuration. */
-    AOSP(2);
+    AOSP(2, false),
+
+    /** The AOSP-compliant + forced trailing blank lines configuration. */
+    AOSP_P(2, true);
 
     private final int indentationMultiplier;
+    private final boolean forceTrailingBlankLines;
 
-    Style(int indentationMultiplier) {
+    Style(int indentationMultiplier, boolean forceTrailingBlankLines) {
       this.indentationMultiplier = indentationMultiplier;
+      this.forceTrailingBlankLines = forceTrailingBlankLines;
     }
 
     int indentationMultiplier() {
       return indentationMultiplier;
+    }
+
+    boolean forceTrailingBlankLines() {
+      return forceTrailingBlankLines;
     }
   }
 
@@ -64,6 +73,11 @@ public class JavaFormatterOptions {
   /** Returns the multiplier for the unit of indent */
   public int indentationMultiplier() {
     return style.indentationMultiplier();
+  }
+
+  /** Return whether trailing blank lines in blocks should be forced or not. */
+  boolean forceTrailingBlankLines() {
+    return style.forceTrailingBlankLines();
   }
 
   /** Returns the default formatting options. */

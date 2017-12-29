@@ -121,6 +121,11 @@ final class CommandLineOptionsParser {
         case "-e":
           optionsBuilder.encoding(Charset.forName(getValue(flag, it, value)));
           break;
+        case "--aosp-p":
+        case "-aosp-p":
+        case "-a-p":
+          optionsBuilder.aospP(true);
+          break;
         default:
           throw new IllegalArgumentException("unexpected flag: " + flag);
       }
