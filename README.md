@@ -30,7 +30,7 @@ offsets (`--offset`), passing through to standard-out (default) or altered
 in-place (`--replace`).
 
 To reformat changed lines in a specific patch, use
-[`google-java-format-diff.py`](https://github.com/google/google-java-format/blob/master/scripts/google-java-format-diff.py).
+[`google-java-format-diff.py`](https://github.com/qbixus/google-java-format/blob/master/scripts/google-java-format-diff.py).
 
 ***Note:*** *There is no configurability as to the formatter's algorithm for
 formatting. This is a deliberate design decision to unify our code formatting on
@@ -38,9 +38,9 @@ a single format.*
 
 ### IntelliJ
 
-A [google-java-format IntelliJ
+~~A [google-java-format IntelliJ
 plugin](https://plugins.jetbrains.com/plugin/8527) is available from the plugin
-repository.
+repository.~~
 
 The plugin will not be enabled by default. To enable it in the current project,
 go to "File→Settings...→google-java-format Settings" and check the "Enable"
@@ -56,7 +56,7 @@ shortcut.
 ### Eclipse
 
 A [google-java-format Eclipse
-plugin](https://github.com/google/google-java-format/releases/download/google-java-format-1.3/google-java-format-eclipse-plugin-1.3.0.jar)
+plugin](https://github.com/qbixus/google-java-format/releases/download/google-java-format-1.5/google-java-format-eclipse-plugin-1.5.0.jar)
 can be downloaded from the releases page. Drop it into the Eclipse [drop-ins
 folder](http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fmisc%2Fp2_dropins_format.html)
 to activate the plugin.
